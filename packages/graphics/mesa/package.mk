@@ -12,6 +12,13 @@ PKG_DEPENDS_TARGET="toolchain Mako:host expat libdrm"
 PKG_LONGDESC="Mesa is a 3-D graphics library with an API."
 PKG_TOOLCHAIN="meson"
 
+if [ "$DEVICE" = "RPi4" ]; then
+  PKG_VERSION="8e961b91c320125c81fbae0d8f9f6076ee58aa3c"
+  PKG_URL="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$PKG_VERSION/mesa-$PKG_VERSION.tar.gz"
+  PKG_SHA256="869ecb3edc668e6dad2c375dde4dbc5071f5e78775df83db8a261b75d1b01c52"
+  PKG_DEPENDS_TARGET="toolchain Mako:host expat libdrm vulkan-loader"
+fi
+
 get_graphicdrivers
 
 PKG_MESON_OPTS_TARGET="-Ddri-drivers=${DRI_DRIVERS// /,} \
@@ -38,6 +45,8 @@ PKG_MESON_OPTS_TARGET="-Ddri-drivers=${DRI_DRIVERS// /,} \
 
 if [ "$TARGET_ARCH" = "i386" ]; then
   PKG_MESON_OPTS_TARGET="${PKG_MESON_OPTS_TARGET//-Dvulkan-drivers=auto/-Dvulkan-drivers=}"
+elif [ "$DEVICE" = "RPi4" ]; then
+  PKG_MESON_OPTS_TARGET="${PKG_MESON_OPTS_TARGET//-Dvulkan-drivers=auto/-Dvulkan-drivers=broadcom}"
 fi
 
 if [ "$DISPLAYSERVER" = "x11" ]; then
@@ -52,7 +61,7 @@ elif [ "$DISTRO" = "Lakka" ]; then
   export X11_INCLUDES=
   PKG_MESON_OPTS_TARGET+=" -Dplatforms=x11 -Ddri3=true -Dglx=dri"
 else
-  PKG_MESON_OPTS_TARGET+=" -Dplatforms= -Ddri3=false -Dglx=disabled"
+  PKG_MESON_OPTS_TARGET+=" -Ddri3=false -Dglx=disabled"
 fi
 
 if [ "$LLVM_SUPPORT" = "yes" ]; then
