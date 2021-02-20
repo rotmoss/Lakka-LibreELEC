@@ -90,7 +90,7 @@ elif [ "$OPENGLES" == "allwinner-mali" ] || [ "$OPENGLES" == "odroidxu3-mali" ];
   RETROARCH_GL="--enable-opengles --enable-kms --disable-x11"
 elif [ "$OPENGLES" == "mesa" ]; then
   if [ "$PROJECT" == "RPi" ]; then
-    RETROARCH_GL="--disable-x11 --enable-opengles --disable-videocore --enable-kms --enable-egl --disable-wayland"
+    RETROARCH_GL="--disable-x11 --enable-opengles --disable-videocore --enable-kms --enable-egl --disable-wayland --enable-vulkan"
   else
     RETROARCH_GL="--enable-opengles --enable-kms --disable-x11"
   fi
